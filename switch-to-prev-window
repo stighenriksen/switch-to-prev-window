@@ -1,0 +1,15 @@
+#!/bin/bash
+
+current_active_window_title="$(xdotool getactivewindow getwindowname)"
+temp_dir="${TMPDIR:-/tmp/}switch_to_prev_window"
+mkdir -p "$temp_dir"
+
+if [ -f "$temp_dir/active_window" ]; then
+    maybe_previous_active_window_title=$(cat "$temp_dir/active_window")
+fi
+
+echo "$current_active_window_title" > "$temp_dir/active_window"
+
+if [ -n "$maybe_previous_active_window_title" ]; then
+    wmctrl -a "$maybe_previous_active_window_title"
+fi
